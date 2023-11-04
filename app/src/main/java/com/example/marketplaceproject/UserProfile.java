@@ -36,7 +36,7 @@ public class UserProfile extends AppCompatActivity {
         startActivity(intent);
         }
     }
-    
+
     @SuppressLint({"WrongViewCast", "MissingInflatedId"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
