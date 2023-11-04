@@ -11,7 +11,7 @@ import java.util.EnumMap;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 4;
-    public static final String DATABASE_NAME = "Login.db";
+    public static final String DATABASE_NAME = "Appdb.db";
     public static final String TABLE_NAME = "Login";
 
     public static final String COLUMN_ID = "_id";
@@ -25,6 +25,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_ID + " INTEGER PRIMARY KEY," + COLUMN_FIRST_NAME + " TEXT," + COLUMN_LAST_NAME +
             " TEXT," + COLUMN_EMAIL + " TEXT," + UID + " TEXT," + COLUMN_PASS + " TEXT)";
 
+    public static final String listing = "CREATE TABLE " + ListingContract.ListingEntry.TABLE_NAME2 + " ("
+            + ListingContract.ListingEntry.ID_COL + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + ListingContract.ListingEntry.UID2 + " TEXT,"
+            + ListingContract.ListingEntry.TITLE_COL + " TEXT,"
+            + ListingContract.ListingEntry.PRICE_COL + " INTEGER,"
+            + ListingContract.ListingEntry.CATEGORY_COL + " TEXT,"
+            + ListingContract.ListingEntry.CONDITION_COL + " TEXT,"
+            + ListingContract.ListingEntry.DESCRIPTION_COL + " TEXT,"
+            + ListingContract.ListingEntry.POSTAL_COL + " TEXT,"
+            + ListingContract.ListingEntry.IMAGE_COL + " BLOB,"
+            + ListingContract.ListingEntry.VIDEO_COL + " TEXT)";
+
     public DatabaseHelper(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -32,11 +44,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(SQL_CREATE_ENTRIES);
+        db.execSQL(listing);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sdb, int i, int i1) {
         sdb.rawQuery("DROP TABLE IF EXISTS " + TABLE_NAME, null).close();
+        sdb.rawQuery("DROP TABLE IF EXISTS " + ListingContract.ListingEntry.TABLE_NAME2, null).close();
     }
 
     public long insert(ContentValues values) {
@@ -45,6 +59,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
 
         return rowID;
+    }
+
+    public Boolean addNewListing(String title, int price, String UID, String Category, String Description, String Condition, String Postal_code, byte[] image, String video) {
+        // on below line we are creating a variable for our sqlite database and calling writable method as we are writing data in our database.
+        SQLiteDatabase db = this.getWritableDatabase();
+        // on below line we are creating a variable for content values.
+        ContentValues values = new ContentValues();
+        // on below line we are passing all values along with its key and value pair.
+        values.put(ListingContract.ListingEntry.TITLE_COL, title);
+        values.put(ListingContract.ListingEntry.PRICE_COL, price);
+        values.put(ListingContract.ListingEntry.UID2, UID);
+        values.put(ListingContract.ListingEntry.CATEGORY_COL, Category);
+        values.put(ListingContract.ListingEntry.DESCRIPTION_COL, Description);
+        values.put(ListingContract.ListingEntry.CONDITION_COL, Condition);
+        values.put(ListingContract.ListingEntry.POSTAL_COL, Postal_code);
+        values.put(ListingContract.ListingEntry.IMAGE_COL, image);
+        values.put(ListingContract.ListingEntry.VIDEO_COL, video);
+
+        // after adding all values we are passing content values to our table.
+        long result = db.insert(ListingContract.ListingEntry.TABLE_NAME2, null, values);
+        db.close();
+        if(result == -1){
+            return false;
+        }
+        else{
+            return true;
+        }
     }
 
     public boolean userExists(String email) {

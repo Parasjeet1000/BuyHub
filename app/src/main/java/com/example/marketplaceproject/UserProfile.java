@@ -2,10 +2,12 @@ package com.example.marketplaceproject;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,6 +29,7 @@ public class UserProfile extends AppCompatActivity {
     private RecyclerView listing;
     private TextView noData;
     private FloatingActionButton newListing;
+    private userListingAdapter mAdapter;
 
     @Override
     public void onStart() {
@@ -50,6 +53,10 @@ public class UserProfile extends AppCompatActivity {
         user = auth.getCurrentUser();
         String uid = user.getUid();
         newListing = findViewById(R.id.newlisting);
+
+        RecyclerView recyclerView = findViewById(R.id.myListings);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mAdapter = new userListingAdapter(this, getAllItems("null"));
 
         if(user == null){
             Intent intent = new Intent(UserProfile.this, Login.class);
@@ -81,11 +88,11 @@ public class UserProfile extends AppCompatActivity {
             });
 
 
-        BottomNavigationView bottomNavigationView=findViewById(R.id.bottom_navigation);
 
+        // BOTTOM NAV CODE
+        BottomNavigationView bottomNavigationView=findViewById(R.id.bottom_navigation);
         // Set Home selected
         bottomNavigationView.setSelectedItemId(R.id.user);
-
         // Perform item selected listener
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -105,5 +112,10 @@ public class UserProfile extends AppCompatActivity {
                 return false;
             }
         });
+
+
+    }
+
+    private Cursor getAllItems(String queryString) {
     }
 }
