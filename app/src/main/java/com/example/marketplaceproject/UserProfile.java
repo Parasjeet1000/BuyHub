@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -25,6 +26,7 @@ public class UserProfile extends AppCompatActivity {
     private FirebaseUser user;
     private RecyclerView listing;
     private TextView noData;
+    private FloatingActionButton newListing;
 
     @Override
     public void onStart() {
@@ -47,6 +49,7 @@ public class UserProfile extends AppCompatActivity {
         db.getReadableDatabase();
         user = auth.getCurrentUser();
         String uid = user.getUid();
+        newListing = findViewById(R.id.newlisting);
 
         if(user == null){
             Intent intent = new Intent(UserProfile.this, Login.class);
@@ -59,6 +62,13 @@ public class UserProfile extends AppCompatActivity {
         user_name.setText("Welcome "+ id);
 
 
+        newListing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(UserProfile.this, CreateListing.class);
+                startActivity(intent);
+            }
+        });
 
             logout.setOnClickListener(new View.OnClickListener() {
                 @Override
