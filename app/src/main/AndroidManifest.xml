@@ -13,7 +13,7 @@
         android:theme="@style/Theme.MarketPlaceProject"
         tools:targetApi="31" >
         <activity
-            android:name=".CreateListing"
+            android:name=".Dashboard"
             android:exported="false" />
         <activity
             android:name=".Messages"
@@ -28,7 +28,7 @@
             android:name=".AccountCreationActivity"
             android:exported="false" />
         <activity
-            android:name=".Dashboard"
+            android:name=".CreateListing"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
