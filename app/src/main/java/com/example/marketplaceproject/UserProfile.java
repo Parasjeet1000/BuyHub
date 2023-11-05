@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +33,7 @@ public class UserProfile extends AppCompatActivity {
     private FloatingActionButton newListing;
     private userListingAdapter mAdapter;
     private SQLiteDatabase mDatabase;
+    private ImageView refresh;
 
     @Override
     public void onStart() {
@@ -39,7 +41,7 @@ public class UserProfile extends AppCompatActivity {
         FirebaseUser currentUser = auth.getCurrentUser();
 
         if(currentUser == null){
-        Intent intent = new Intent(this, Login.class);
+        Intent intent = new Intent(UserProfile.this, Login.class);
         startActivity(intent);
         }
     }
@@ -58,7 +60,8 @@ public class UserProfile extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.myListings);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter = new userListingAdapter(UserProfile.this, getAllItems(uid));
+        //mAdapter.swapCursor(getAllItems(uid));
+        mAdapter = new userListingAdapter(UserProfile.this, getAllItems("null"));
         recyclerView.setAdapter(mAdapter);
 
         if(user == null){
@@ -67,16 +70,23 @@ public class UserProfile extends AppCompatActivity {
         }
 
         user_name = findViewById(R.id.userid);
+        refresh=findViewById(R.id.refresh);
         logout = findViewById(R.id.logout);
         String id = db.getUserFirstNameByUid(uid);
         user_name.setText("Welcome "+ id);
 
-
+refresh.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        mAdapter.swapCursor(getAllItems(uid));
+    }
+});
         newListing.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(uid == user.getUid()){
                 Intent intent = new Intent(UserProfile.this, CreateListing.class);
-                startActivity(intent);
+                startActivity(intent);}
             }
         });
 
@@ -128,13 +138,13 @@ public class UserProfile extends AppCompatActivity {
             selection = null;
             selectionArgs = null;
         } else {
-            selection = ListingContract.ListingEntry.UID2 + " LIKE ?";
+            selection = ListingContract.ListingEntry.UID2 + " IS ?";
             selectionArgs = new String[]{queryString};
         }
 
 
         return mDatabase.query(
-                ListingContract.ListingEntry.TABLE_NAME2,
+                    ListingContract.ListingEntry.TABLE_NAME2,
                 null,
                 selection,
                 selectionArgs,

@@ -58,15 +58,15 @@ public class Dashboard extends AppCompatActivity {
                 if (itemId == R.id.user) {
                     FirebaseUser currentUser = auth.getCurrentUser();
                     if(currentUser == null){
-                        startActivity(new Intent(getApplicationContext(), Login.class));
+                        startActivity(new Intent(Dashboard.this, Login.class));
                     }
-                    startActivity(new Intent(getApplicationContext(), UserProfile.class));
+                    startActivity(new Intent(Dashboard.this, UserProfile.class));
                     overridePendingTransition(0, 0);
                     return true;
                 } else if (itemId == R.id.dash) {
                     return true;
                 } else if (itemId == R.id.msg) {
-                    startActivity(new Intent(getApplicationContext(), Messages.class));
+                    startActivity(new Intent(Dashboard.this, Messages.class));
                     overridePendingTransition(0, 0);
                     return true;
                 }

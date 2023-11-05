@@ -128,8 +128,15 @@ public class CreateListing extends AppCompatActivity {
                 Boolean checkinsertdata = db.addNewListing(adtitle,adprice,uid,adcategory,addescription,adcondition,adpostalcode,formattedDate,imageByteArray, videoPath);
                 if(checkinsertdata) {
                     Toast.makeText(CreateListing.this, "Note has been saved :)", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(CreateListing.this, UserProfile.class);
-                    startActivity(intent);
+                    title.setText("");
+                    price.setText("");
+                    description.setText("");
+                    postalcode.setText("");
+                    category.setText("");
+
+                    if(uid == user.getUid()){
+                    Intent intent = new Intent(CreateListing.this, Dashboard.class);
+                    startActivity(intent);}
                 }
                 else{
                     Toast.makeText(CreateListing.this, "Note failed to save", Toast.LENGTH_SHORT).show();
