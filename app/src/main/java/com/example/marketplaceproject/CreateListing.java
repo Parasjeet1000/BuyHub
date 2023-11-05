@@ -28,6 +28,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.io.ByteArrayOutputStream;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 
 public class CreateListing extends AppCompatActivity {
@@ -50,6 +52,12 @@ public class CreateListing extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_listing);
 
+
+        LocalDateTime currentDate  = LocalDateTime.now();
+
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy"); // or "dd-MM-yyyy"
+        String formattedDate = currentDate.format(formatter);
 
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
@@ -90,7 +98,7 @@ public class CreateListing extends AppCompatActivity {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (checkedId == R.id.brandnew) {adcondition="New";
-                    //Toast.makeText(CreateListing.this, adcondition, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CreateListing.this, formattedDate, Toast.LENGTH_SHORT).show();
                 } else if (checkedId == R.id.likenew) {adcondition="Like New";// Option 2 is selected
                 } else if (checkedId == R.id.good) {adcondition="Good";// Option 3 is selected
                 } else if (checkedId == R.id.fair) {adcondition="Fair";// Option 3 is selected
@@ -117,7 +125,7 @@ public class CreateListing extends AppCompatActivity {
                 imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
                 byte[] imageByteArray = stream.toByteArray();
 
-                Boolean checkinsertdata = db.addNewListing(adtitle,adprice,uid,adcategory,addescription,adcondition,adpostalcode,imageByteArray,videoPath);
+                Boolean checkinsertdata = db.addNewListing(adtitle,adprice,uid,adcategory,addescription,adcondition,adpostalcode,formattedDate,imageByteArray, videoPath);
                 if(checkinsertdata) {
                     Toast.makeText(CreateListing.this, "Note has been saved :)", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(CreateListing.this, UserProfile.class);

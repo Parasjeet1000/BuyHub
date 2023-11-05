@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,10 +27,11 @@ public class UserProfile extends AppCompatActivity {
     private DatabaseHelper db;
     private FirebaseAuth auth;
     private FirebaseUser user;
-    private RecyclerView listing;
+    private RecyclerView recyclerView;
     private TextView noData;
     private FloatingActionButton newListing;
     private userListingAdapter mAdapter;
+    private SQLiteDatabase mDatabase;
 
     @Override
     public void onStart() {
@@ -48,15 +50,16 @@ public class UserProfile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
         auth = FirebaseAuth.getInstance();
-        db = new DatabaseHelper(this);
-        db.getReadableDatabase();
+        db = new DatabaseHelper(UserProfile.this);
+        mDatabase=db.getWritableDatabase();
         user = auth.getCurrentUser();
         String uid = user.getUid();
         newListing = findViewById(R.id.newlisting);
 
-        RecyclerView recyclerView = findViewById(R.id.myListings);
+        recyclerView = findViewById(R.id.myListings);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter = new userListingAdapter(this, getAllItems("null"));
+        mAdapter = new userListingAdapter(UserProfile.this, getAllItems(uid));
+        recyclerView.setAdapter(mAdapter);
 
         if(user == null){
             Intent intent = new Intent(UserProfile.this, Login.class);
@@ -117,5 +120,29 @@ public class UserProfile extends AppCompatActivity {
     }
 
     private Cursor getAllItems(String queryString) {
+
+        String selection;
+        String[] selectionArgs;
+
+        if (queryString.equalsIgnoreCase("null")) {
+            selection = null;
+            selectionArgs = null;
+        } else {
+            selection = ListingContract.ListingEntry.UID2 + " LIKE ?";
+            selectionArgs = new String[]{queryString};
+        }
+
+
+        return mDatabase.query(
+                ListingContract.ListingEntry.TABLE_NAME2,
+                null,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                null
+        );
+
+
     }
 }

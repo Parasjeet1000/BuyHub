@@ -43,6 +43,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
     implementation("androidx.navigation:navigation-fragment:2.7.5")
+    implementation("androidx.recyclerview:recyclerview:1.3.2")
     implementation("androidx.navigation:navigation-ui:2.7.5")
     implementation("com.google.firebase:firebase-auth:22.2.0")
     implementation("com.google.firebase:firebase-inappmessaging:20.4.0")

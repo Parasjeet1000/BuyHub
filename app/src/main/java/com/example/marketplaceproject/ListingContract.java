@@ -14,7 +14,7 @@ public class ListingContract {
         public static final String CONDITION_COL = "condition";
         public static final String DESCRIPTION_COL = "description";
         public static final String POSTAL_COL = "postal_code";
-
+        public static final String DATE_COL = "date";
         public static final String IMAGE_COL = "image";
         public static final String VIDEO_COL = "video";
     }

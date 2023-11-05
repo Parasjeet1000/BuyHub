@@ -34,6 +34,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + ListingContract.ListingEntry.CONDITION_COL + " TEXT,"
             + ListingContract.ListingEntry.DESCRIPTION_COL + " TEXT,"
             + ListingContract.ListingEntry.POSTAL_COL + " TEXT,"
+            + ListingContract.ListingEntry.DATE_COL + " TEXT,"
             + ListingContract.ListingEntry.IMAGE_COL + " BLOB,"
             + ListingContract.ListingEntry.VIDEO_COL + " TEXT)";
 
@@ -61,7 +62,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return rowID;
     }
 
-    public Boolean addNewListing(String title, int price, String UID, String Category, String Description, String Condition, String Postal_code, byte[] image, String video) {
+    public Boolean addNewListing(String title, int price, String UID, String Category, String Description, String Condition, String Postal_code, String date, byte[] image, String video) {
         // on below line we are creating a variable for our sqlite database and calling writable method as we are writing data in our database.
         SQLiteDatabase db = this.getWritableDatabase();
         // on below line we are creating a variable for content values.
@@ -74,6 +75,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(ListingContract.ListingEntry.DESCRIPTION_COL, Description);
         values.put(ListingContract.ListingEntry.CONDITION_COL, Condition);
         values.put(ListingContract.ListingEntry.POSTAL_COL, Postal_code);
+        values.put(ListingContract.ListingEntry.DATE_COL, date);
         values.put(ListingContract.ListingEntry.IMAGE_COL, image);
         values.put(ListingContract.ListingEntry.VIDEO_COL, video);
 
