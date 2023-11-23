@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "532788104317",
+    "project_id": "buyhub-18eee",
+    "storage_bucket": "buyhub-18eee.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:532788104317:android:4ebc5ab671db678c63f514",
+        "android_client_info": {
+          "package_name": "com.example.marketplaceproject"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD76qhEtU17OQSMi3pRME_pBTp5omTtWg0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
