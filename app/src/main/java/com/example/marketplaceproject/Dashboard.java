@@ -2,6 +2,8 @@ package com.example.marketplaceproject;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -19,6 +21,7 @@ public class Dashboard extends AppCompatActivity {
 
 
     private Button button;
+    private RecyclerView recyclerView;
     private FirebaseAuth auth;
     private FirebaseUser user;
 
@@ -36,11 +39,15 @@ public class Dashboard extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
-        //button = findViewById(R.id.button2);
+        DatabaseHelper dbHelper = new DatabaseHelper(this);
+        dbHelper.createDatabase();
+
 
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
 
+
+        recyclerView = findViewById(R.id.mainListings);
 
 
         BottomNavigationView bottomNavigationView=findViewById(R.id.bottom_navigation);

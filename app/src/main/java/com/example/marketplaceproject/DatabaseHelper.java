@@ -6,20 +6,67 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.EnumMap;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 4;
     public static final String DATABASE_NAME = "Appdb.db";
-    public static final String TABLE_NAME = "Login";
+    public static final String ASSETS_DB_PATH = "prepopulated.db";
 
+    public static final String TABLE_NAME = "Login";
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_FIRST_NAME = "FirstName";
     public static final String COLUMN_LAST_NAME = "LastName";
     public static final String COLUMN_EMAIL = "Email";
     public static final String COLUMN_PASS = "Password";
     public static final String UID = "uid";
+
+
+    private final Context context;
+
+    public DatabaseHelper(Context context){
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.context = context;
+    }
+    public void createDatabase() {
+        boolean dbExist = checkDatabase();
+
+        if (!dbExist) {
+            try {
+                copyDatabase();
+            } catch (IOException e) {
+                e.printStackTrace();
+                Toast.makeText(context, "ERROR NO DATABASE FOUND", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private boolean checkDatabase() {
+        File dbFile = context.getDatabasePath(DATABASE_NAME);
+        return dbFile.exists();
+    }
+
+    private void copyDatabase() throws IOException {
+        InputStream inputStream = context.getAssets().open(ASSETS_DB_PATH);
+        OutputStream outputStream = new FileOutputStream(context.getDatabasePath(DATABASE_NAME));
+
+        byte[] buffer = new byte[1024];
+        int length;
+        while ((length = inputStream.read(buffer)) > 0) {
+            outputStream.write(buffer, 0, length);
+        }
+
+        outputStream.flush();
+        outputStream.close();
+        inputStream.close();
+    }
 
     public static final String SQL_CREATE_ENTRIES = "CREATE TABLE " + TABLE_NAME + " (" +
             COLUMN_ID + " INTEGER PRIMARY KEY," + COLUMN_FIRST_NAME + " TEXT," + COLUMN_LAST_NAME +
@@ -38,9 +85,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + ListingContract.ListingEntry.IMAGE_COL + " BLOB,"
             + ListingContract.ListingEntry.VIDEO_COL + " TEXT)";
 
-    public DatabaseHelper(Context context){
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
-    }
 
     @Override
     public void onCreate(SQLiteDatabase db) {

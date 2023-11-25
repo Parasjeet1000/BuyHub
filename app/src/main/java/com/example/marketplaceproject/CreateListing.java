@@ -98,7 +98,6 @@ public class CreateListing extends AppCompatActivity {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (checkedId == R.id.brandnew) {adcondition="New";
-                    Toast.makeText(CreateListing.this, formattedDate, Toast.LENGTH_SHORT).show();
                 } else if (checkedId == R.id.likenew) {adcondition="Like New";// Option 2 is selected
                 } else if (checkedId == R.id.good) {adcondition="Good";// Option 3 is selected
                 } else if (checkedId == R.id.fair) {adcondition="Fair";// Option 3 is selected
