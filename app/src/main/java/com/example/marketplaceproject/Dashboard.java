@@ -29,6 +29,9 @@ public class Dashboard extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
+        DatabaseHelper dbHelper = new DatabaseHelper(this);
+        dbHelper.createDatabase();
+
         FirebaseUser currentUser = auth.getCurrentUser();
         if(currentUser == null){
 
@@ -39,15 +42,14 @@ public class Dashboard extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
-        DatabaseHelper dbHelper = new DatabaseHelper(this);
-        dbHelper.createDatabase();
+
 
 
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
 
 
-        recyclerView = findViewById(R.id.mainListings);
+       // recyclerView = findViewById(R.id.mainListings);
 
 
         BottomNavigationView bottomNavigationView=findViewById(R.id.bottom_navigation);

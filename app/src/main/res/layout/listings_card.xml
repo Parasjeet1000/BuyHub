@@ -2,63 +2,83 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/rlMarketplace"
-    android:layout_marginStart="0dp"
-    android:layout_marginTop="10dp"
-    android:layout_marginBottom="10dp"
-    android:paddingStart="2dp"
-    android:paddingEnd="2dp"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
-    <ImageView
-        android:id="@+id/ivImageMp"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:scaleType="centerCrop"
-        android:layout_marginTop="1dp"
-        tools:srcCompat="@tools:sample/avatars" />
+    android:layout_width="match_parent"
+    android:layout_height="105dp">
+
 
     <TextView
-        android:id="@+id/tvItemNamePMarketplace"
+        android:id="@+id/border2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="UNO"
-        android:layout_marginStart="2dp"
-        android:textSize="20sp"
-        android:textColor="@color/black_95_transparent"
-        android:layout_below="@+id/ivImageMp"/>
+        android:layout_height="1dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_alignParentBottom="true"
+        android:background="#808080"/>
 
-    <RelativeLayout
-        android:id="@+id/rlwithprice"
+    <ImageView
+        android:id="@+id/adpic"
+        android:layout_width="121dp"
+        android:layout_height="79dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="278dp"
+        android:layout_marginBottom="16dp"
+        app:srcCompat="@drawable/baseline_question_mark_24" />
+
+    <TextView
+        android:id="@+id/adtitle"
+        android:layout_width="103dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="156dp"
+        android:layout_marginBottom="70dp"
+        android:text="Title"
+        android:textSize="20dp" />
+
+    <TextView
+        android:id="@+id/adprice"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="198dp"
+        android:layout_marginBottom="52dp"
+        android:text="Price" />
+
+    <Button
+        android:id="@+id/update"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:layout_below="@+id/tvItemNamePMarketplace">
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="165dp"
+        android:layout_marginBottom="3dp"
+        android:text="Update"
+        android:backgroundTint="@color/md_theme_light_inversePrimary"
+        />
 
-        <TextView
-            android:id="@+id/etPriceMp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="2dp"
-            android:background="@android:color/transparent"
-            android:layout_toRightOf="@id/tvDollarSign"
-            android:layout_centerVertical="true"
-            android:textColor="@color/black_95_transparent"
-            android:textSize="20sp"
-            android:text="115" />
+    <Button
+        android:id="@+id/delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="3dp"
+        android:text="Delete"
+        android:backgroundTint="@color/error"
+        />
 
-        <TextView
-            android:id="@+id/tvDollarSign"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="15dp"
-            android:text="$"
-            android:textSize="20sp"
-            android:textColor="@color/black_95_transparent"/>
-    </RelativeLayout>
+    <TextView
+        android:id="@+id/addate"
+        android:layout_width="84dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="75dp"
+        android:text="Date" />
+
 
 </RelativeLayout>
