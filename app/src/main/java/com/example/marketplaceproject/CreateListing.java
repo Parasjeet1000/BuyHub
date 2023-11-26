@@ -5,6 +5,9 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.res.AssetFileDescriptor;
+import android.content.res.AssetManager;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.content.Intent;
 import android.database.Cursor;
@@ -28,6 +31,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -42,7 +46,7 @@ public class CreateListing extends AppCompatActivity {
     private RadioButton brandnew, likenew, good, fair;
     private ImageView picture, video;
     private VideoView videoView;
-    private Button post;
+    private Button post, capture;
     private DatabaseHelper db;
     private FirebaseAuth auth;
     private FirebaseUser user;
@@ -66,6 +70,7 @@ public class CreateListing extends AppCompatActivity {
         db= new DatabaseHelper(CreateListing.this);
 
         picture = findViewById(R.id.imageselect);
+        capture = findViewById(R.id.capture);
         video=findViewById(R.id.videoselect);
         title = findViewById(R.id.Listingtitle);
         description = findViewById(R.id.Listingdescription);
@@ -79,6 +84,23 @@ public class CreateListing extends AppCompatActivity {
 
         videoView=findViewById(R.id.videoView);
         videoView.setVisibility(View.GONE);
+
+
+        // Sound effect
+
+        // Define SoundPool instance and load the sound (soundId loaded from previous steps)
+        SoundPool soundPool = new SoundPool.Builder().setMaxStreams(5).build();
+        AssetManager assetManager = getApplicationContext().getAssets();
+        AssetFileDescriptor fileDescriptor = null;
+        try {
+            fileDescriptor = assetManager.openFd("post.mp3");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        int soundId = soundPool.load(fileDescriptor, 1);
+
+
+
 
 
 
@@ -126,7 +148,17 @@ public class CreateListing extends AppCompatActivity {
 
                 Boolean checkinsertdata = db.addNewListing(adtitle,adprice,uid,adcategory,addescription,adcondition,adpostalcode,formattedDate,imageByteArray, videoPath);
                 if(checkinsertdata) {
-                    Toast.makeText(CreateListing.this, "Note has been saved :)", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CreateListing.this, "Listing has been saved :)", Toast.LENGTH_SHORT).show();
+                    // Play the loaded sound
+                    int streamId = soundPool.play(soundId, 1.0f, 1.0f, 1, 0, 1.0f);
+
+                    // Release SoundPool resources when done
+                    soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
+                        @Override
+                        public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
+                            soundPool.play(soundId, 1.0f, 1.0f, 1, 0, 1.0f);
+                        }
+                    });
                     title.setText("");
                     price.setText("");
                     description.setText("");
@@ -134,11 +166,11 @@ public class CreateListing extends AppCompatActivity {
                     category.setText("");
 
                     if(uid == user.getUid()){
-                    Intent intent = new Intent(CreateListing.this, Dashboard.class);
-                    startActivity(intent);}
+                        Intent intent = new Intent(CreateListing.this, Dashboard.class);
+                        startActivity(intent);}
                 }
                 else{
-                    Toast.makeText(CreateListing.this, "Note failed to save", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CreateListing.this, "Listing failed to save", Toast.LENGTH_SHORT).show();
                 }
 
 
@@ -168,6 +200,13 @@ public class CreateListing extends AppCompatActivity {
 
             }
         });
+        capture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent, 100);
+            }
+        });
 
 
 
@@ -177,8 +216,11 @@ public class CreateListing extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == PICK_IMAGE_REQUEST) {
+        if(requestCode == 100){
+            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+            picture.setImageBitmap(bitmap);
+        }
+        else if (requestCode == PICK_IMAGE_REQUEST) {
             // Handle the image selected from the gallery
             Uri selectedImageUri = data.getData();
             picture.setImageURI(selectedImageUri);

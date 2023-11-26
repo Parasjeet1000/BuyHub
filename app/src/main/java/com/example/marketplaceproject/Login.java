@@ -56,7 +56,7 @@ public class Login extends AppCompatActivity {
         Button loginBtn = findViewById(R.id.button_login);
         ImageView visible = findViewById(R.id.imageView_visible);
         progressBar = findViewById(R.id.progressBar);
-
+        progressBar.setVisibility(View.GONE);
 
         email = findViewById(R.id.edittext_email);
         pass = findViewById(R.id.edittext_password);
@@ -79,6 +79,7 @@ public class Login extends AppCompatActivity {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressBar.setVisibility(View.VISIBLE);
                 String email_addr = email.getText().toString();
                 String password = pass.getText().toString();
                 if(email_addr.isEmpty()){
@@ -95,12 +96,12 @@ public class Login extends AppCompatActivity {
                             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
-                                    progressBar.setVisibility(View.VISIBLE);
+
 
                                     if (task.isSuccessful()) {
                                         Toast.makeText(Login.this, "Authentication Success.",
                                                 Toast.LENGTH_SHORT).show();
-                                        progressBar.setVisibility(View.GONE);
+                                        //progressBar.setVisibility(View.GONE);
                                         Intent intent = new Intent(Login.this, Dashboard.class);
                                         startActivity(intent);
                                         finish();
@@ -122,7 +123,7 @@ public class Login extends AppCompatActivity {
 
     }
 
-        public Boolean checkCredentials(String email, String pass) {
+    public Boolean checkCredentials(String email, String pass) {
 
         if (db.userExists(email)) {
             Cursor user = db.getUser(email);
@@ -138,6 +139,6 @@ public class Login extends AppCompatActivity {
         } else {
             Toast.makeText(this, "Email not registered.", Toast.LENGTH_SHORT).show();
         }
-            return false;
-        }
+        return false;
+    }
 }

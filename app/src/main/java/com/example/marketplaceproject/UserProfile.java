@@ -7,8 +7,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.res.AssetFileDescriptor;
+import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -75,7 +78,9 @@ public class UserProfile extends AppCompatActivity {
         String id = db.getUserFirstNameByUid(uid);
         user_name.setText("Welcome "+ id);
 
-refresh.setOnClickListener(new View.OnClickListener() {
+
+
+        refresh.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View v) {
         mAdapter.swapCursor(getAllItems(uid));

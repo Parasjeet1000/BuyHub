@@ -154,7 +154,13 @@
         android:ems="10"
         android:hint="Postal Code"
         android:inputType="text" />
-
+            <Button
+                android:id="@+id/capture"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="Capture Image"
+                android:backgroundTint="@color/yellow_700"/>
             <Button
                 android:id="@+id/post"
                 android:layout_width="match_parent"
