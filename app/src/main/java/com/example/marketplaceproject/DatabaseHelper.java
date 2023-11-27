@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.io.File;
@@ -18,7 +19,7 @@ import java.util.EnumMap;
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 4;
     public static final String DATABASE_NAME = "Appdb.db";
-    public static final String ASSETS_DB_PATH = "prepopulated.db";
+    public static final String DATABASE_NAME_IN_ASSETS = "prepopulated.db";
 
     public static final String TABLE_NAME = "Login";
     public static final String COLUMN_ID = "_id";
@@ -38,23 +39,44 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void createDatabase() {
         boolean dbExist = checkDatabase();
 
-        if (!dbExist) {
+        Log.d("Please be False", "Size of database in assets: " + dbExist);
+
+        if (getDatabaseSize() < 1090000) {
             try {
-                copyDatabase();
+                copyDatabaseFromAssets();
             } catch (IOException e) {
                 e.printStackTrace();
-                Toast.makeText(context, "ERROR NO DATABASE FOUND", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "ERROR COPYING DATABASE", Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+
+    private long getDatabaseSize() {
+        File dbFile = context.getDatabasePath(DATABASE_NAME);
+        if (dbFile.exists()) {
+            return dbFile.length(); // This returns the size of the file in bytes
+        } else {
+            return 0; // Database file doesn't exist or has no size
         }
     }
 
     private boolean checkDatabase() {
         File dbFile = context.getDatabasePath(DATABASE_NAME);
-        return dbFile.exists();
+        String dbFilePath = dbFile.getPath(); // Get the file path for logging
+        Log.d("DatabaseCheck", "Database file path: " + dbFilePath); // Log the file path
+
+        boolean exists = dbFile.exists();
+        Log.d("DatabaseCheck", "Database exists: " + exists); // Log if the file exists or not
+
+        return exists;
     }
 
-    private void copyDatabase() throws IOException {
-        InputStream inputStream = context.getAssets().open(ASSETS_DB_PATH);
+
+    private void copyDatabaseFromAssets() throws IOException {
+        InputStream inputStream = context.getAssets().open(DATABASE_NAME_IN_ASSETS);
+        int size = inputStream.available(); // Get the size of the file
+        Log.d("DatabaseSize", "Size of database in assets: " + size);
+
         OutputStream outputStream = new FileOutputStream(context.getDatabasePath(DATABASE_NAME));
 
         byte[] buffer = new byte[1024];
@@ -67,6 +89,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         outputStream.close();
         inputStream.close();
     }
+
 
     public static final String SQL_CREATE_ENTRIES = "CREATE TABLE " + TABLE_NAME + " (" +
             COLUMN_ID + " INTEGER PRIMARY KEY," + COLUMN_FIRST_NAME + " TEXT," + COLUMN_LAST_NAME +
