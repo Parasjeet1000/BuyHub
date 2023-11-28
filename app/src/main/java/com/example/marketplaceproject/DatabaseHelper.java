@@ -129,7 +129,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return rowID;
     }
 
-    public Boolean addNewListing(String title, int price, String UID, String Category, String Description, String Condition, String Postal_code, String date, byte[] image, String video) {
+    public Boolean addOrUpdateListing(int id, String title, int price, String UID, String Category, String Description, String Condition, String Postal_code, String date, byte[] image, String video) {
         // on below line we are creating a variable for our sqlite database and calling writable method as we are writing data in our database.
         SQLiteDatabase db = this.getWritableDatabase();
         // on below line we are creating a variable for content values.
@@ -147,7 +147,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(ListingContract.ListingEntry.VIDEO_COL, video);
 
         // after adding all values we are passing content values to our table.
-        long result = db.insert(ListingContract.ListingEntry.TABLE_NAME2, null, values);
+        long result;
+        if (id < 0){
+            result = db.insert(ListingContract.ListingEntry.TABLE_NAME2, null, values);
+        } else {
+            result = db.update(ListingContract.ListingEntry.TABLE_NAME2,  values, COLUMN_ID	+ "	= ?", new String[] { String.valueOf(id)});
+        }
+
         db.close();
         if(result == -1){
             return false;
@@ -155,6 +161,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         else{
             return true;
         }
+    }
+
+
+    public void deleteListing(int id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(ListingContract.ListingEntry.TABLE_NAME2, COLUMN_ID	+ "	= ?", new String[] { String.valueOf(id)});
+        db.close();
+    }
+
+    public Cursor getListingDetails(int id) {
+        SQLiteDatabase db = getWritableDatabase();
+        return db.query(ListingContract.ListingEntry.TABLE_NAME2, new String[] {"_id", "uid", "title", "price", "category", "condition", "description", "postal_code", "date", "image", "video"}, COLUMN_ID + " = ?", new String[]{ String.valueOf(id)}, null, null, null);
     }
 
     public boolean userExists(String email) {
@@ -196,4 +214,3 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 }
-

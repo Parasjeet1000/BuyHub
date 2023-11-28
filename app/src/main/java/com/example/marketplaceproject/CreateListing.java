@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
+import android.graphics.BitmapFactory;
 import android.media.SoundPool;
 import android.os.Bundle;
 import android.content.Intent;
@@ -24,6 +25,7 @@ import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
@@ -46,6 +48,7 @@ public class CreateListing extends AppCompatActivity {
     private RadioButton brandnew, likenew, good, fair;
     private ImageView picture, video;
     private VideoView videoView;
+    private TextView titletext;
     private Button post, capture;
     private DatabaseHelper db;
     private FirebaseAuth auth;
@@ -56,6 +59,8 @@ public class CreateListing extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_listing);
 
+        Intent myIntent = getIntent(); // gets the previously created intent
+        int id = myIntent.getIntExtra("id", -1);
 
         LocalDateTime currentDate  = LocalDateTime.now();
 
@@ -69,6 +74,8 @@ public class CreateListing extends AppCompatActivity {
 
         db= new DatabaseHelper(CreateListing.this);
 
+        titletext = findViewById(R.id.titletextview);
+
         picture = findViewById(R.id.imageselect);
         capture = findViewById(R.id.capture);
         video=findViewById(R.id.videoselect);
@@ -80,7 +87,10 @@ public class CreateListing extends AppCompatActivity {
         condition = findViewById(R.id.condition);
         post= findViewById(R.id.post);
 
-
+        brandnew = findViewById(R.id.brandnew);
+        likenew = findViewById(R.id.likenew);
+        good = findViewById(R.id.good);
+        fair = findViewById(R.id.fair);
 
         videoView=findViewById(R.id.videoView);
         videoView.setVisibility(View.GONE);
@@ -127,6 +137,46 @@ public class CreateListing extends AppCompatActivity {
             }
         });
 
+        // Editing
+        if (id >= 0){
+            titletext.setText("Edit Listing");
+            post.setText("Update Listing");
+            Cursor cursor = db.getListingDetails(id);
+            if (cursor.moveToFirst()) {
+                do {
+                    title.setText(cursor.getString(cursor.getColumnIndexOrThrow("title")));
+                    description.setText(cursor.getString(cursor.getColumnIndexOrThrow("description")));
+                    category.setText(cursor.getString(cursor.getColumnIndexOrThrow("category")));
+                    postalcode.setText(cursor.getString(cursor.getColumnIndexOrThrow("postal_code")));
+                    price.setText(cursor.getString(cursor.getColumnIndexOrThrow("price")));
+
+                    String temp = cursor.getString(cursor.getColumnIndexOrThrow("condition"));
+                    switch(temp){
+                        case "New":
+                            brandnew.setChecked(true);
+                            break;
+                        case "Like New":
+                            likenew.setChecked(true);
+                            break;
+                        case "Good":
+                            good.setChecked(true);
+                            break;
+                        case "Fair":
+                            fair.setChecked(true);
+                            break;
+                    }
+
+                    byte[] imageData = cursor.getBlob(cursor.getColumnIndexOrThrow("image"));
+                    Bitmap bmp = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
+                    picture.setImageBitmap(bmp);
+
+                    videoPath = cursor.getString(cursor.getColumnIndexOrThrow("video"));
+
+
+                } while (cursor.moveToNext());
+            }
+        }
+
         post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -146,7 +196,8 @@ public class CreateListing extends AppCompatActivity {
                 imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
                 byte[] imageByteArray = stream.toByteArray();
 
-                Boolean checkinsertdata = db.addNewListing(adtitle,adprice,uid,adcategory,addescription,adcondition,adpostalcode,formattedDate,imageByteArray, videoPath);
+                Boolean checkinsertdata = db.addOrUpdateListing(id,adtitle,adprice,uid,adcategory,addescription,adcondition,adpostalcode,formattedDate,imageByteArray, videoPath);
+
                 if(checkinsertdata) {
                     Toast.makeText(CreateListing.this, "Listing has been saved :)", Toast.LENGTH_SHORT).show();
                     // Play the loaded sound
