@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".OpenListing">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textview_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:text="TITLE"
+                android:gravity="center"
+                android:textSize="36sp"/>
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="410dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center"
+                android:layout_margin="16dp" />
+
+            <VideoView
+                android:id="@+id/videoView"
+                android:layout_width="410dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center"
+                android:layout_margin="16dp" />
+
+
+            <TextView
+                android:id="@+id/textview_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:text="$400"
+                android:textSize="26sp"/>
+
+            <TextView
+                android:id="@+id/textview_condition"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:text="Condition"
+                android:textSize="26sp"/>
+
+            <TextView
+                android:id="@+id/textview_category"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:text="Category"
+                android:textSize="26sp"
+                app:layout_constraintTop_toBottomOf="@id/textview_price"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                android:id="@+id/textview_desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:text="DESCRIPTION"
+                android:textSize="20sp"
+                app:layout_constraintTop_toBottomOf="@id/textview_category"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                android:id="@+id/textview_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:text="Date"
+                android:textSize="24sp"
+                app:layout_constraintTop_toBottomOf="@id/textview_desc"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                android:id="@+id/textview_postal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:text="A1B2C3"
+                android:textSize="24sp"
+                app:layout_constraintTop_toBottomOf="@id/textview_date"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/google_maps"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:layout_margin="16dp"
+                android:name="com.google.android.gms.maps.SupportMapFragment"/>
+
+            <Button
+                android:id="@+id/contact_seller"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="Contact seller"
+                app:layout_constraintTop_toBottomOf="@id/google_maps"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+        </LinearLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
